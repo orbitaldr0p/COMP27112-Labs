@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            import * as THREE from "https://web.cs.manchester.ac.uk/three/three.js-master/build/three.module.js";
+            let scene, camera, renderer;
+            let sunGeometry, sunMaterial, sunMesh;
+            let earthGeometry, earthMaterial, earthMesh;
+            let moonGeometry, moonMaterial, moonMesh;
+
+            function init() {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(
+                    75,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    10000
+                );
+                camera.position.set(0, 30, 500);
+                renderer = new THREE.WebGLRenderer();
+                renderer.setClearColor(0x000000, 1.0);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+                sun();
+            }
+
+            function sun() {
+                sunGeometry = new THREE.SphereGeometry(109, 400, 200);
+                sunMaterial = new THREE.MeshStandardMaterial({
+                    emissive: 0xffd700,
+                    // emissiveMap: texture,
+                    emissiveIntensity: 1,
+                    wireframe: false,
+                });
+                sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+                scene.add(sunMesh);
+            }
+
+            function animate() {
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+                mesh.rotation.x += 0.011;
+                mesh.rotation.y += 0.013;
+            }
+
+            init();
+        </script>
+    </body>
+</html>

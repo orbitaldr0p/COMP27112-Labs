@@ -15,7 +15,8 @@
             let sunGeometry, sunMaterial, sunMesh;
             let earthGeometry, earthMaterial, earthMesh;
             let moonGeometry, moonMaterial, moonMesh;
-            let earthSystem, orbitLine;
+            let orbitLine;
+            var earthSystem = new THREE.Group();
             const moonOrbit = 50;
             const curve = new THREE.EllipseCurve(
                 0,
@@ -41,12 +42,9 @@
                 renderer.setClearColor(0x000000, 1.0);
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
-                earthSystem = new THREE.Group();
                 sun();
-                earth();
-                moon();
+                earthMoonSystem();
                 drawOrbit();
-                scene.add(earthSystem);
             }
 
             function sun() {
@@ -67,23 +65,29 @@
                 earthGeometry = new THREE.SphereGeometry(25, 50, 50);
                 earthMaterial = new THREE.MeshStandardMaterial({
                     // map: texture,
-                    color: 0x0000ff,
+                    color: 0xffffff,
                     wireframe: false,
                 });
                 earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
-                earthSystem.add(earthMesh);
             }
 
             function moon() {
                 moonGeometry = new THREE.SphereGeometry(5, 40, 20);
                 moonMaterial = new THREE.MeshStandardMaterial({
                     // map: texture,
-                    color: 0x0000ff,
+                    color: 0xffffff,
                     wireframe: false,
                 });
                 moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
                 moonMesh.position.set(moonOrbit, 0, 0);
-                earthSystem.add(moonMesh);
+            }
+            
+            function earthMoonSystem(){
+                earth()
+                moon()
+                earthSystem.add(earthMesh)
+                earthSystem.add(moonMesh)
+                scene.add(earthSystem);
             }
 
             function drawOrbit() {
@@ -95,7 +99,7 @@
                     color: 0xffffff,
                 });
                 orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
-                orbitLine.rotation.x = Math.PI / 2; // Rotate to lie in XZ plane
+                orbitLine.rotation.x = Math.PI / 2;
                 scene.add(orbitLine);
             }
 

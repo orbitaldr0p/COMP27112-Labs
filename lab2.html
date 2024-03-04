@@ -52,8 +52,7 @@
                 sunMaterial = new THREE.MeshStandardMaterial({
                     emissive: 0xffd700,
                     // emissiveMap: texture,
-                    emissiveIntensity: 1,
-                    wireframe: false,
+                    emissiveIntensity: 1
                 });
                 sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
                 scene.add(sunMesh);
@@ -63,29 +62,27 @@
 
             function earth() {
                 earthGeometry = new THREE.SphereGeometry(25, 50, 50);
-                earthMaterial = new THREE.MeshStandardMaterial({
+                earthMaterial = new THREE.MeshPhongMaterial({
                     // map: texture,
-                    color: 0xffffff,
-                    wireframe: false,
+                    color: 0x0000ff
                 });
                 earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
             }
 
             function moon() {
                 moonGeometry = new THREE.SphereGeometry(5, 40, 20);
-                moonMaterial = new THREE.MeshStandardMaterial({
+                moonMaterial = new THREE.MeshPhongMaterial({
                     // map: texture,
-                    color: 0xffffff,
-                    wireframe: false,
+                    color: 0x0000ff
                 });
                 moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
-                moonMesh.position.set(moonOrbit, 0, 0);
             }
             
             function earthMoonSystem(){
                 earth()
                 moon()
                 earthSystem.add(earthMesh)
+                moonMesh.position.set(moonOrbit, 0, 0);
                 earthSystem.add(moonMesh)
                 scene.add(earthSystem);
             }
@@ -104,13 +101,13 @@
             }
 
             function animate() {
-                const time = 0.00001 * performance.now();
+                const time = 0.0001 * performance.now();
                 const t = time % 1;
                 const point = curve.getPoint(t);
-                moonMesh.position.x = moonOrbit * Math.cos(time * 50);
-                moonMesh.position.z = moonOrbit * Math.sin(time * 50);
                 earthSystem.position.x = point.x;
-                earthSystem.position.y = point.y;
+                earthSystem.position.z = point.y;
+                moonMesh.position.x = moonOrbit * Math.cos(time * 10);
+                moonMesh.position.z = moonOrbit * Math.sin(time * 10);
                 renderer.render(scene, camera);
                 requestAnimationFrame(animate);
             }

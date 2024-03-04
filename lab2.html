@@ -11,11 +11,13 @@
     <body>
         <script type="module">
             import * as THREE from "https://web.cs.manchester.ac.uk/three/three.js-master/build/three.module.js";
+            import { OrbitControls } from "https://web.cs.manchester.ac.uk/three/three.js-master/examples/jsm/controls/OrbitControls.js";
             let scene, camera, renderer;
             let sunGeometry, sunMaterial, sunMesh;
             let earthGeometry, earthMaterial, earthMesh;
             let moonGeometry, moonMaterial, moonMesh;
             let orbitLine;
+            let controls;
             var earthSystem = new THREE.Group();
             const moonOrbit = 50;
             const curve = new THREE.EllipseCurve(
@@ -41,6 +43,8 @@
                 renderer = new THREE.WebGLRenderer();
                 renderer.setClearColor(0x000000, 1.0);
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                controls = new OrbitControls(camera, renderer.domElement);
+                controls.autoRotate = true;
                 document.body.appendChild(renderer.domElement);
                 sun();
                 earthMoonSystem();

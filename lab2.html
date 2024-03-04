@@ -15,6 +15,7 @@
             let sunGeometry, sunMaterial, sunMesh;
             let earthGeometry, earthMaterial, earthMesh;
             let moonGeometry, moonMaterial, moonMesh;
+            let earthSystem;
 
             function init() {
                 scene = new THREE.Scene();
@@ -29,7 +30,10 @@
                 renderer.setClearColor(0x000000, 1.0);
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
+                earthSystem = new THREE.Group();
                 sun();
+                earth();
+                moon();
             }
 
             function sun() {
@@ -42,16 +46,43 @@
                 });
                 sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
                 scene.add(sunMesh);
+                const sunlight = new THREE.PointLight(0xffffff, 1, 100);
+                sunlight.position.set(50, 50, 50);
+                scene.add(sunlight);
+            }
+
+            function earth() {
+                earthGeometry = new THREE.SphereGeometry(25, 50, 50);
+                earthMaterial = new THREE.MeshStandardMaterial({
+                    // map: texture,
+                    color: 0x0000ff,
+                    wireframe: false,
+                });
+                earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+                earthSystem.add(earthMesh);
+            }
+
+            function moon() {
+                var orbitRadius = 50;
+                moonGeometry = new THREE.SphereGeometry(5, 40, 20);
+                moonMaterial = new THREE.MeshStandardMaterial({
+                    // map: texture,
+                    color: 0x0000ff,
+                    wireframe: false,
+                });
+                moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
+                moonMesh.position.set(orbitRadius, 0, 0);
+                earthSystem.add(moonMesh);
             }
 
             function animate() {
                 renderer.render(scene, camera);
                 requestAnimationFrame(animate);
-                mesh.rotation.x += 0.011;
-                mesh.rotation.y += 0.013;
             }
 
             init();
+            animate();
+
         </script>
     </body>
 </html>

@@ -31,13 +31,6 @@
                 mesh = new THREE.Mesh(geometry, material);
                 scene.add(mesh)
             }
-            function animate(){
-                renderer.render(scene, camera);
-                requestAnimationFrame(animate);
-                mesh.rotation.x += 0.011;
-                mesh.rotation.y += 0.013;
-            }
-
             function vertexShader(){
                 return `
                     vec4 p;
@@ -60,6 +53,13 @@
                 `
             }
             
+            function animate(){
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+                mesh.rotation.x += 0.011;
+                mesh.rotation.y += 0.013;
+            }
+
             init();
             animate();
         </script>

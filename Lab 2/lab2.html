@@ -17,6 +17,7 @@
             let earthGeometry, earthMaterial, earthMesh;
             let cloudGeometry, cloudMaterial, cloudMesh;
             let moonGeometry, moonMaterial, moonMesh;
+            let spaceGeometry, spaceMaterial, spaceMesh;
             let orbitLine;
             let controls;
             var earthSystem = new THREE.Group();
@@ -49,28 +50,46 @@
                 controls.autoRotate = true;
                 document.body.appendChild(renderer.domElement);
                 sun();
+                space();
                 earthMoonSystem();
                 drawOrbit();
             }
 
+            function space() {
+                var texture = loader.load("https://cdn.eso.org/images/screen/eso0932a.jpg")
+                spaceGeometry = new THREE.SphereGeometry(5000, 400, 200)
+                spaceMaterial = new THREE.MeshStandardMaterial({
+                    map: texture,
+                    side: THREE.DoubleSide,
+                })
+                spaceMesh = new THREE.Mesh(spaceGeometry, spaceMaterial)
+                scene.add(spaceMesh)
+            }
+
             function sun() {
-                var texture = loader.load('https://www.solarsystemscope.com/textures/download/2k_sun.jpg');
+                var texture = loader.load(
+                    "https://www.solarsystemscope.com/textures/download/2k_sun.jpg"
+                );
                 //var texture = loader.load('sun.jpg');
                 sunGeometry = new THREE.SphereGeometry(109, 400, 200);
                 sunMaterial = new THREE.MeshStandardMaterial({
                     emissive: 0xffd700,
                     emissiveMap: texture,
-                    emissiveIntensity: 1
+                    emissiveIntensity: 1,
                 });
                 sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
                 scene.add(sunMesh);
-                var sunlight = new THREE.PointLight(0xffffff, 10, 1000, 2);
+                var sunlight = new THREE.PointLight(0xffffff, 10, 6000, 2);
                 scene.add(sunlight);
             }
 
             function earth() {
-                var texture = loader.load('https://upload.wikimedia.org/wikipedia/commons/a/ac/Earthmap1000x500.jpg');
-                var cloudTexture = loader.load('https://i.stack.imgur.com/B3c7G.jpg')
+                var texture = loader.load(
+                    "https://upload.wikimedia.org/wikipedia/commons/a/ac/Earthmap1000x500.jpg"
+                );
+                var cloudTexture = loader.load(
+                    "https://i.stack.imgur.com/B3c7G.png"
+                );
                 earthGeometry = new THREE.SphereGeometry(25, 50, 50);
                 earthMaterial = new THREE.MeshPhongMaterial({
                     map: texture,
@@ -81,27 +100,30 @@
                 cloudGeometry = new THREE.SphereGeometry(26, 51, 51);
                 cloudMaterial = new THREE.MeshPhongMaterial({
                     map: cloudTexture,
-                    //color: 0x0000ff
+                    opacity: 0.5,
+                    transparent: true,
                 });
                 cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
             }
 
             function moon() {
-                var texture = loader.load('https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg');
+                var texture = loader.load(
+                    "https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg"
+                );
                 moonGeometry = new THREE.SphereGeometry(5, 40, 20);
                 moonMaterial = new THREE.MeshPhongMaterial({
                     map: texture,
-                    //color: 0x0000ff
                 });
                 moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
             }
-            
-            function earthMoonSystem(){
-                earth()
-                moon()
-                earthSystem.add(earthMesh)
+
+            function earthMoonSystem() {
+                earth();
+                moon();
+                earthSystem.add(earthMesh);
+                earthSystem.add(cloudMesh);
                 moonMesh.position.set(moonOrbit, 0, 0);
-                earthSystem.add(moonMesh)
+                earthSystem.add(moonMesh);
                 scene.add(earthSystem);
             }
 
@@ -119,7 +141,7 @@
             }
 
             function animate() {
-                const time = 0.0001 * performance.now();
+                const time = 0.00005 * performance.now();
                 const t = time % 1;
                 const point = curve.getPoint(t);
                 earthSystem.position.x = point.x;
@@ -127,7 +149,8 @@
                 moonMesh.position.x = moonOrbit * Math.cos(time * 30);
                 moonMesh.position.z = moonOrbit * Math.sin(time * 30);
                 sunMesh.rotation.y += 0.001;
-                earthMesh.rotation.y += 0.1;
+                earthMesh.rotation.y += 0.03;
+                cloudMesh.rotation.y += 0.02;
                 renderer.render(scene, camera);
                 requestAnimationFrame(animate);
             }

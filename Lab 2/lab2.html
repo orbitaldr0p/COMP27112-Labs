@@ -79,7 +79,7 @@
                 });
                 sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
                 scene.add(sunMesh);
-                var sunlight = new THREE.PointLight(0xffffff, 10, 6000, 1);
+                var sunlight = new THREE.PointLight(0xffffff, 2, 6000, 1);
                 scene.add(sunlight);
             }
 
@@ -148,6 +148,7 @@
                 earthSystem.position.z = point.y;
                 moonMesh.position.x = moonOrbit * Math.cos(time * 30);
                 moonMesh.position.z = moonOrbit * Math.sin(time * 30);
+                moonMesh.rotation.y += 0.01;
                 sunMesh.rotation.y += 0.001;
                 earthMesh.rotation.y += 0.03;
                 cloudMesh.rotation.y += 0.02;

@@ -79,7 +79,7 @@
                 });
                 sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
                 scene.add(sunMesh);
-                var sunlight = new THREE.PointLight(0xffffff, 10, 6000, 2);
+                var sunlight = new THREE.PointLight(0xffffff, 10, 6000, 1);
                 scene.add(sunlight);
             }
 
@@ -100,7 +100,7 @@
                 cloudGeometry = new THREE.SphereGeometry(26, 51, 51);
                 cloudMaterial = new THREE.MeshPhongMaterial({
                     map: cloudTexture,
-                    opacity: 0.5,
+                    opacity: 0.2,
                     transparent: true,
                 });
                 cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
